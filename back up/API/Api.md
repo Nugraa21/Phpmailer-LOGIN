@@ -38,6 +38,9 @@ CREATE TABLE otp (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+-- Tambahkan kolom username pada tabel users
+ALTER TABLE users ADD username VARCHAR(255) NOT NULL;
+
 ```
 
 # Api Libarri 

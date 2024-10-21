@@ -1,5 +1,5 @@
 <?php
-include 'config.php';
+include '../API/config.php';
 
 $message = '';
 
@@ -25,20 +25,20 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <title>Daftar</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="Dasbord/assets/media/icon.png">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" href="../assets/media/icon.png">
 </head>
 <body>
     <div class="container">
     <div class="login-logo">
             <div>
-                <img width="50px" height="50px" src="Dasbord/assets/media/icon.png" alt="">
+                <img width="50px" height="50px" src="../assets/media/icon.png" alt="">
             </div>
             <div>
                 <b>Nugra </b>DEV
             </div>
         </div>
-        <form action="register.php" method="POST">
+        <form action="index.php" method="POST">
             <h2>Daftar</h2>
             <div class="form-group">
                 <label for="email">Email:</label>
@@ -57,7 +57,7 @@ $conn->close();
                 </div>
             <?php endif; ?>
             <div class="text-center">
-                <p>Sudah punya akun? <a href="login.php">Login di sini</a></p>
+                <p>Sudah punya akun? <a href="../login/index.php">Login di sini</a></p>
             </div>
         </form>
     </div>

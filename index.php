@@ -9,5 +9,7 @@
 <body>
     <div><a href="login/index.php">Login</a></div>
     <div><a href="register/index.php">Register</a></div>
+    <div><a href="dashboard/index.php">Dashboard</a></div>
+    <div><a href="password/index.php">Password</a></div>
 </body>
 </html>

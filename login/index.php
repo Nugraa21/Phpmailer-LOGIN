@@ -1,7 +1,7 @@
 <?php
 session_start();
-include 'config.php';
-require 'vendor/autoload.php'; // Pastikan PHPMailer terinstall
+include '../API/config.php';
+require '../API/vendor/autoload.php'; // Pastikan PHPMailer terinstall
 
 $error_message = ''; // Tambahkan variabel ini
 
@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mail->Body = "Code verivikasi anda adalah: $otp";
 
         if ($mail->send()) {
-            header("Location: verify.php");
+            header("Location: ../verify/index.php");
             exit();
         } else {
             echo "Pesan tidak dapat dikirim. Mailer Error: " . $mail->ErrorInfo;
@@ -55,20 +55,20 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="Dasbord/assets/media/icon.png">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" href="../assets/media/icon.png">
 </head>
 <body>
     <div class="container">
     <div class="login-logo">
             <div>
-                <img width="50px" height="50px" src="Dasbord/assets/media/icon.png" alt="">
+                <img width="50px" height="50px" src="../assets/media/icon.png" alt="">
             </div>
             <div>
                 <b>Nugra </b>DEV
             </div>
         </div>
-        <form action="login.php" method="POST">
+        <form action="index.php" method="POST">
             <h2>Login</h2>
             <div class="form-group">
                 <label for="email">Email:</label>
@@ -85,7 +85,7 @@ $conn->close();
                 <div class="error-message"><?php echo $error_message; ?></div>
             <?php endif; ?>
             <div class="text-center">
-                <p>Belum punya akun? <a href="register.php">Daftar di sini</a></p>
+                <p>Belum punya akun? <a href="../register/index.php">Daftar di sini</a></p>
             </div>
         </form>
     </div>

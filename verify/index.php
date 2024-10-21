@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($otpInput == $_SESSION['otp']) {
         // Verifikasi berhasil
-        header("Location: Dasbord\index.php");
+        header("Location: ../dashboard/index.php");
         exit();
     } else {
         $error_message = "OTP tidak valid!";
@@ -21,20 +21,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Verifikasi OTP</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="Dasbord/assets/media/icon.png">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" href="../assets/media/icon.png">
 </head>
 <body>
     <div class="container">
     <div class="login-logo">
             <div>
-                <img width="50px" height="50px" src="Dasbord/assets/media/icon.png" alt="">
+                <img width="50px" height="50px" src="../assets/media/icon.png" alt="">
             </div>
             <div>
                 <b>Nugra </b>DEV
             </div>
         </div>
-        <form action="verify.php" method="POST">
+        <form action="index.php" method="POST">
             <h2>Verifikasi OTP</h2>
             <div class="form-group">
                 <label for="otp">Masukkan OTP:</label>

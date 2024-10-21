@@ -7,8 +7,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     
     // Cek apakah email terdaftar
-    $sql = "SELECT * FROM users WHERE email='$email'";
-    $result = $conn->query($sql);
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email=?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
     
     if ($result->num_rows > 0) {
         // Buat OTP
@@ -16,19 +18,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $expiry = date("Y-m-d H:i:s", strtotime('+15 minutes')); // OTP valid selama 15 menit
         
         // Simpan OTP dan waktu kedaluwarsa di database
-        $sql = "UPDATE users SET otp_code='$otp', otp_expiry='$expiry' WHERE email='$email'";
-        if ($conn->query($sql) === TRUE) {
+        $stmt = $conn->prepare("UPDATE users SET otp_code=?, otp_expiry=? WHERE email=?");
+        $stmt->bind_param("sss", $otp, $expiry, $email);
+        if ($stmt->execute()) {
             // Kirim OTP melalui email
             $mail = new PHPMailer\PHPMailer\PHPMailer();
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'nugra315@gmail.com'; // Email Anda
-            $mail->Password = 'xmxb hxtz daym biru'; // Password email Anda
+            $mail->Username = getenv('EMAIL_USERNAME'); // Gunakan variabel lingkungan
+            $mail->Password = getenv('EMAIL_PASSWORD'); // Gunakan variabel lingkungan
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
             
-            $mail->setFrom('nugra315@gmail.com', 'Nugra21');
+            $mail->setFrom(getenv('EMAIL_USERNAME'), 'Nugra21');
             $mail->addAddress($email);
             
             $mail->isHTML(true);
@@ -36,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->Body = "Kode OTP Anda adalah: $otp";
             
             if ($mail->send()) {
-                header("Location: verify/index.php $email");
+                header("Location: verify.php?email=" . urlencode($email));
                 exit();
             } else {
                 $message = "Pesan tidak dapat dikirim. Error: " . $mail->ErrorInfo;

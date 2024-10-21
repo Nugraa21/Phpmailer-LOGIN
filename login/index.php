@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mail->Body = "Code verivikasi anda adalah: $otp";
 
         if ($mail->send()) {
-            header("Location: ../verify/index.php");
+            header("Location: verify.php");
             exit();
         } else {
             echo "Pesan tidak dapat dikirim. Mailer Error: " . $mail->ErrorInfo;

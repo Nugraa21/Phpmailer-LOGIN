@@ -6,9 +6,15 @@ $error_message = '';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $otpInput = $_POST['otp'];
 
-    if ($otpInput == $_SESSION['otp']) {
+    // Debugging: Tampilkan nilai OTP yang disimpan di sesi dan yang diinput
+    // echo "OTP di sesi: " . $_SESSION['otp'] . "<br>";
+    // echo "OTP input: " . $otpInput . "<br>";
+
+    if (isset($_SESSION['otp']) && $otpInput == $_SESSION['otp']) {
         // Verifikasi berhasil
-        header("Location: ../dashboard/index.php");
+        // Hapus OTP dari sesi setelah verifikasi berhasil
+        unset($_SESSION['otp']);
+        header("Location: ../profile/index.php");
         exit();
     } else {
         $error_message = "OTP tidak valid!";
@@ -34,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <b>Nugra </b>DEV
             </div>
         </div>
-        <form action="index.php" method="POST">
+        <form action="verify.php" method="POST">
             <h2>Verifikasi OTP</h2>
             <div class="form-group">
                 <label for="otp">Masukkan OTP:</label>

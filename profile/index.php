@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['username']) || !isset($_SESSION['email'])) {
-    header("Location: ../index.php");
+    header("Location: ../logout.php");
     exit();
 }
 
@@ -21,71 +21,7 @@ $email = $_SESSION['email'];
     
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-    <style>
-        /* Custom CSS for Dashboard */
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-        }
-
-        #wrapper {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        #sidebar-wrapper {
-            width: 250px;
-            background-color: #343a40;
-            color: #fff;
-        }
-
-        #sidebar-wrapper .list-group-item {
-            border: none;
-            padding: 15px 20px;
-        }
-
-        #sidebar-wrapper .list-group-item:hover {
-            background-color: #495057;
-        }
-
-        #page-content-wrapper {
-            flex-grow: 1;
-            padding: 20px;
-        }
-
-        .navbar {
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .card {
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            margin-bottom: 20px;
-        }
-
-        .card-header {
-            background-color: #f8f9fa;
-            font-weight: bold;
-        }
-
-        .text-white {
-            color: #fff !important;
-        }
-        
-        .btn-custom {
-            background-color: #007bff;
-            border-color: #007bff;
-            color: #fff;
-        }
-
-        .btn-custom:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
-        }
-
-    </style>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 

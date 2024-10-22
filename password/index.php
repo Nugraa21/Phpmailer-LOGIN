@@ -1,55 +1,52 @@
 <?php
+session_start();
 include '../API/config.php';
-require '../API/vendor/autoload.php'; // Pastikan PHPMailer sudah terinstal
+require '../API/vendor/autoload.php'; // Ensure PHPMailer is installed
+
 $message = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
-    
-    // Cek apakah email terdaftar
-    $stmt = $conn->prepare("SELECT * FROM users WHERE email=?");
+
+    // Check if email exists in the database
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
-    
-    if ($result->num_rows > 0) {
-        // Buat OTP
+    $user = $result->fetch_assoc();
+
+    if ($user) {
+        // Generate OTP and send email
         $otp = rand(100000, 999999);
-        $expiry = date("Y-m-d H:i:s", strtotime('+15 minutes')); // OTP valid selama 15 menit
-        
-        // Simpan OTP dan waktu kedaluwarsa di database
-        $stmt = $conn->prepare("UPDATE users SET otp_code=?, otp_expiry=? WHERE email=?");
-        $stmt->bind_param("sss", $otp, $expiry, $email);
-        if ($stmt->execute()) {
-            // Kirim OTP melalui email
-            $mail = new PHPMailer\PHPMailer\PHPMailer();
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = getenv('EMAIL_USERNAME'); // Gunakan variabel lingkungan
-            $mail->Password = getenv('EMAIL_PASSWORD'); // Gunakan variabel lingkungan
-            $mail->SMTPSecure = 'tls';
-            $mail->Port = 587;
-            
-            $mail->setFrom(getenv('EMAIL_USERNAME'), 'Nugra21');
-            $mail->addAddress($email);
-            
-            $mail->isHTML(true);
-            $mail->Subject = 'Kode OTP untuk Reset Password';
-            $mail->Body = "Kode OTP Anda adalah: $otp";
-            
-            if ($mail->send()) {
-                header("Location: verify.php?email=" . urlencode($email));
-                exit();
-            } else {
-                $message = "Pesan tidak dapat dikirim. Error: " . $mail->ErrorInfo;
-            }
+        $_SESSION['otp'] = $otp;
+        $_SESSION['email'] = $email;
+
+        // Send OTP via email
+        $mail = new PHPMailer\PHPMailer\PHPMailer();
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'nugra315@gmail.com'; // Your email
+        $mail->Password = 'xmxb hxtz daym biru'; // Your email password
+        $mail->SMTPSecure = 'tls';
+        $mail->Port = 587;
+
+        $mail->setFrom('nugra315@gmail.com', 'Nugra21');
+        $mail->addAddress($email);
+        $mail->isHTML(true);
+        $mail->Subject = 'Verivikasi untuk mengganti password ';
+        $mail->Body = "Code otp: $otp";
+
+        if ($mail->send()) {
+            header("Location: verify_reset.php");
+            exit();
+        } else {
+            $message = "Mailer Error: " . $mail->ErrorInfo;
         }
     } else {
-        $message = "Email tidak terdaftar!";
+        $message = "Email not found!";
     }
 }
-
 $conn->close();
 ?>
 
@@ -57,23 +54,26 @@ $conn->close();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Lupa Password</title>
+    <title>Reset Password Request</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
     <div class="container">
-        <h2>Lupa Password</h2>
-            <form action="index.php" method="POST">
+        <form action="index.php" method="POST">
+            <h2>Forgot Password</h2>
             <div class="form-group">
-                <label for="email">Masukkan Email Anda:</label>
+                <label for="email">Email:</label>
                 <input type="email" name="email" required>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn">Kirim OTP</button>
+                <button type="submit" class="btn">Send OTP</button>
             </div>
             <?php if (!empty($message)): ?>
-                <div class="message"><?php echo $message; ?></div>
+                <div class="error-message"><?php echo $message; ?></div>
             <?php endif; ?>
+            <div class="text-center">
+                <p><a href="../login/index.php">Kembali</a></p>
+            </div>
         </form>
     </div>
 </body>

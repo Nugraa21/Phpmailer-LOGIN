@@ -1,20 +1,14 @@
 <?php
 session_start();
-
 $error_message = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $otpInput = $_POST['otp'];
 
-    // Debugging: Tampilkan nilai OTP yang disimpan di sesi dan yang diinput
-    // echo "OTP di sesi: " . $_SESSION['otp'] . "<br>";
-    // echo "OTP input: " . $otpInput . "<br>";
-
     if (isset($_SESSION['otp']) && $otpInput == $_SESSION['otp']) {
         // Verifikasi berhasil
-        // Hapus OTP dari sesi setelah verifikasi berhasil
-        unset($_SESSION['otp']);
-        header("Location: ../profile/index.php");
+        unset($_SESSION['otp']); // Hapus OTP dari sesi setelah verifikasi berhasil
+        header("Location: dashboard.php"); // Redirect ke dashboard
         exit();
     } else {
         $error_message = "OTP tidak valid!";
@@ -32,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="container">
-    <div class="login-logo">
+        <div class="login-logo">
             <div>
                 <img width="50px" height="50px" src="../assets/media/icon.png" alt="">
             </div>
@@ -50,9 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <button type="submit" class="btn">Verifikasi</button>
             </div>
             <?php if (!empty($error_message)): ?>
-                <div class="error-message">
-                    <?php echo $error_message; ?>
-                </div>
+                <div class="error-message"><?php echo $error_message; ?></div>
             <?php endif; ?>
         </form>
     </div>

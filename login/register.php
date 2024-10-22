@@ -6,15 +6,29 @@ $message = '';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $username = $_POST['username']; // Ambil username dari form
 
-    // Simpan ke database
-    $sql = "INSERT INTO users (email, password) VALUES ('$email', '$password')";
-    
-    if ($conn->query($sql) === TRUE) {
-        $message = "Pendaftaran berhasil! Silakan login.";
+    // Cek apakah email sudah terdaftar
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $message = "Email sudah terdaftar!";
     } else {
-        $message = "Error: " . $conn->error;
+        // Simpan ke database menggunakan prepared statement
+        $stmt = $conn->prepare("INSERT INTO users (email, password, username) VALUES (?, ?, ?)");
+        $stmt->bind_param("sss", $email, $password, $username); // Tambahkan username
+
+        if ($stmt->execute()) {
+            $message = "Pendaftaran berhasil! Silakan login.";
+        } else {
+            $message = "Error: " . $stmt->error;
+        }
     }
+
+    $stmt->close(); // Tutup statement
 }
 
 $conn->close();
@@ -30,7 +44,7 @@ $conn->close();
 </head>
 <body>
     <div class="container">
-    <div class="login-logo">
+        <div class="login-logo">
             <div>
                 <img width="50px" height="50px" src="../assets/media/icon.png" alt="">
             </div>
@@ -38,8 +52,12 @@ $conn->close();
                 <b>Nugra </b>DEV
             </div>
         </div>
-        <form action="index.php" method="POST">
+        <form action="register.php" method="POST"> <!-- Ubah action ke register.php -->
             <h2>Daftar</h2>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" name="username" required> <!-- Input untuk username -->
+            </div>
             <div class="form-group">
                 <label for="email">Email:</label>
                 <input type="email" name="email" required>

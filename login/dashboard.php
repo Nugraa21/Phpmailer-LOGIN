@@ -88,6 +88,7 @@ $conn->close();
                 <!-- Home Section -->
                 <section id="homeSection" class="mb-5">
                     <div class="row">
+                        <!-- --- -->
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">Selamat datang <?php echo $username; ?></div>
@@ -104,6 +105,65 @@ $conn->close();
                                 </div>
                             </div>
                         </div>
+                        <!-- --- -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">Profile Overview</div>
+                                <div class="card-body">
+                                    <p><strong>Username:</strong> <?php echo $username; ?></p>
+                                    <p><strong>Email:</strong> <?php echo $email; ?></p>
+                                    <a href="ganti_nama.php" class="btn btn-custom">Edit Profile</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- --- -->
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">Aktifitas terbaru</div>
+                                <div class="card-body">
+                                    <p>Anda belum memasukan rekam aktifitas.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- --- -->
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">Settings</div>
+                                <div class="card-body">
+                                    <p>Kelola data anda.</p>
+                                    <a href="../password/index.php" class="btn btn-custom">Change Password</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- --- -->
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">Help</div>
+                                <div class="card-body">
+                                    <p>Bila anda butuh bantuan anda bisa menghubungi suportkami / <a href="https://nugra.online">Admin</a>.</p>
+                                    <!-- <a href="#" class="btn btn-custom">View FAQ</a> -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- --- -->
+                        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">Contact Support</div>
+                <div class="card-body">
+                    <p>If you have any questions or need assistance, feel free to reach out to us through the following platforms:</p>
+                    <ul class="list-unstyled">
+                        <li><a href="https://github.com/Nugraa21" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
+                        <li><a href="https://www.instagram.com/nugraa_21/" target="_blank"><i class="fab fa-instagram"></i> Instagram</a></li>
+                        <li><a href="https://www.youtube.com/@nugra21" target="_blank"><i class="fab fa-youtube"></i> YouTube</a></li>
+                        <li><a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i> Facebook</a></li>
+                        <li><a href="https://x.com" target="_blank"><i class="fab fa-twitter"></i> X (Twitter)</a></li>
+                        <li><a href="https://wa.me/085740993739" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a></li>
+                    </ul>
+                    <p>You can also email us at: <a href="mailto:support@yourwebsite.com">nugra21.admin@were.io</a></p>
+                </div>
+            </div>
+        </div>
+                        <!-- --- -->
                     </div>
                 </section>
 

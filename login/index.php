@@ -39,8 +39,69 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mail->addAddress($email);
 
         $mail->isHTML(true);
-        $mail->Subject = 'Code OTP N21.WERE';
-        $mail->Body = "Kode verifikasi anda adalah: $otp";
+        $mail->Subject = 'Kode OTP N21.WERE';
+        $mail->Body = "
+            <html>
+            <head>
+                <style>
+                    .email-container {
+                        font-family: Arial, sans-serif;
+                        color: #333;
+                        max-width: 600px;
+                        margin: auto;
+                        padding: 20px;
+                        border: 1px solid #ddd;
+                        border-radius: 10px;
+                    }
+                    .email-header {
+                        background-color: #4CAF50;
+                        padding: 10px;
+                        text-align: center;
+                        color: white;
+                        font-size: 24px;
+                        border-radius: 10px 10px 0 0;
+                    }
+                    .email-body {
+                        margin-top: 20px;
+                        font-size: 16px;
+                    }
+                    .otp-code {
+                        font-size: 36px;
+                        font-weight: bold;
+                        color: #4CAF50;
+                        text-align: center;
+                        margin: 20px 0;
+                    }
+                    .email-footer {
+                        margin-top: 20px;
+                        font-size: 12px;
+                        color: #777;
+                        text-align: center;
+                    }
+                    .highlight {
+                        color: #4CAF50;
+                        font-weight: bold;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class='email-container'>
+                    <div class='email-header'>
+                        Verifikasi Kode OTP
+                    </div>
+                    <div class='email-body'>
+                        <p>Hai <span class='highlight'>{$user['username']}</span>,</p>
+                        <p>Terima kasih telah menggunakan layanan kami. Berikut adalah kode verifikasi untuk melanjutkan:</p>
+                        <div class='otp-code'>$otp</div>
+                        <p>Masukkan kode ini di halaman verifikasi untuk melanjutkan. Jika Anda tidak meminta kode ini, abaikan email ini.</p>
+                    </div>
+                    <div class='email-footer'>
+                        <p>&copy; 2024 N21.WERE. Semua hak cipta dilindungi.</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+        ";
 
         if ($mail->send()) {
             header("Location: verify.php");
@@ -55,6 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $conn->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

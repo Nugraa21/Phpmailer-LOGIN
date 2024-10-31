@@ -5,13 +5,16 @@ $error_message = '';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $otpInput = $_POST['otp'];
 
-    if (isset($_SESSION['otp']) && $otpInput == $_SESSION['otp']) {
-        // Verifikasi berhasil
+    // Cek apakah OTP sesuai dan belum kedaluwarsa
+    // setelah mengecek opt apakah ada di dalam sesi 
+    if (isset($_SESSION['otp']) && $_POST['otp'] == $_SESSION['otp'] && isset($_SESSION['otp_expiration']) && time() < $_SESSION['otp_expiration']) {
+        //  
         unset($_SESSION['otp']); // Hapus OTP dari sesi setelah verifikasi berhasil
+        unset($_SESSION['otp_expiration']); // Hapus waktu kedaluwarsa setelah verifikasi berhasil
         header("Location: dashboard.php"); // Redirect ke dashboard
         exit();
     } else {
-        $error_message = "OTP tidak valid!";
+        $error_message = "OTP tidak valid atau telah kedaluwarsa!";
     }
 }
 ?>
@@ -27,12 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="container">
         <div class="login-logo">
-            <div>
-                <img width="50px" height="50px" src="../assets/media/icon.png" alt="">
-            </div>
-            <div>
-                <b>Nugra </b>DEV
-            </div>
+            <div><img width="50px" height="50px" src="../assets/media/icon.png" alt=""></div>
+            <div><b>Nugra </b>DEV</div>
         </div>
         <form action="verify.php" method="POST">
             <h2>Verifikasi OTP</h2>

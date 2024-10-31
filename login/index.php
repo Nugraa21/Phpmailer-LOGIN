@@ -1,41 +1,42 @@
 <?php
 session_start();
-include '../API/config.php';
+include '../API/config.php'; // Menyambungkan kefils coneksi databes
 require '../API/vendor/autoload.php'; // Pastikan PHPMailer terinstall
 
 $error_message = ''; // Variabel untuk menampung pesan error
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $email = $_POST['email'];       // Code variable metot 
+    $password = $_POST['password']; // ( untukmenampung emaildan paswword yang di kirimkan dari form )
 
     // Menggunakan prepared statement untuk menghindari SQL Injection
-    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?"); // code kusus untuk menyeleksipengguna 
+    $stmt->bind_param("s", $email); // mencocokan variable email di databes 
+    $stmt->execute(); // 
     $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
+    $user = $result->fetch_assoc(); // mengambil data dari databes
 
-    if ($user && password_verify($password, $user['password'])) {
-        // Simpan informasi pengguna ke dalam sesi
-        $_SESSION['user_id'] = $user['id']; // Simpan ID pengguna
-        $_SESSION['username'] = $user['username']; // Simpan username
+    if ($user && password_verify($password, $user['password'])) { // mencocokan data paswword yang ada di databes
+
+        $_SESSION['user_id'] = $user['id'];         // Menyimpan data untukidentifikasi 
+        $_SESSION['username'] = $user['username'];  //
 
         // Mengirim OTP
-        $otp = rand(100000, 999999);
-        $_SESSION['otp'] = $otp;
+        $otp = rand(100000, 999999);      // mencetakotpsecara random
+        $_SESSION['otp'] = $otp;                    // Menyimpan otpke dalam sesi 
+        $_SESSION['otp_expiration'] = time() + 300; // OTP berlaku selama 5 menit (300 detik)
 
         // Kirim email dengan OTP
         $mail = new PHPMailer\PHPMailer\PHPMailer();
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com'; // SMTP server
         $mail->SMTPAuth = true; // Mengaktifkan autentikasi SMTP
-        $mail->Username = 'nugra315@gmail.com'; // Email Anda
-        $mail->Password = 'xmxb hxtz daym biru'; // Password email Anda
-        $mail->SMTPSecure = 'tls'; // Gunakan 'ssl' jika menggunakan port 465
-        $mail->Port = 587; // Port untuk TLS
+        $mail->Username = 'nugra315@gmail.com'; // Eamail pengirim
+        $mail->Password = 'xmxb hxtz daym biru'; // Password email pengirim
+        $mail->SMTPSecure = 'tls';
+        $mail->Port = 587;
 
-        $mail->setFrom('nugra315@gmail.com', 'Nugra21'); // Format pengirim
+        $mail->setFrom('nugra315@gmail.com', 'Nugra21');
         $mail->addAddress($email);
 
         $mail->isHTML(true);
@@ -44,60 +45,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <html>
             <head>
                 <style>
-                    .email-container {
-                        font-family: Arial, sans-serif;
-                        color: #333;
-                        max-width: 600px;
-                        margin: auto;
-                        padding: 20px;
-                        border: 1px solid #ddd;
-                        border-radius: 10px;
-                    }
-                    .email-header {
-                        background-color: #4CAF50;
-                        padding: 10px;
-                        text-align: center;
-                        color: white;
-                        font-size: 24px;
-                        border-radius: 10px 10px 0 0;
-                    }
-                    .email-body {
-                        margin-top: 20px;
-                        font-size: 16px;
-                    }
-                    .otp-code {
-                        font-size: 36px;
-                        font-weight: bold;
-                        color: #4CAF50;
-                        text-align: center;
-                        margin: 20px 0;
-                    }
-                    .email-footer {
-                        margin-top: 20px;
-                        font-size: 12px;
-                        color: #777;
-                        text-align: center;
-                    }
-                    .highlight {
-                        color: #4CAF50;
-                        font-weight: bold;
-                    }
+                    .email-container { font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; }
+                    .email-header { background-color: #4CAF50; padding: 10px; text-align: center; color: white; font-size: 24px; border-radius: 10px 10px 0 0; }
+                    .email-body { margin-top: 20px; font-size: 16px; }
+                    .otp-code { font-size: 36px; font-weight: bold; color: #4CAF50; text-align: center; margin: 20px 0; }
+                    .email-footer { margin-top: 20px; font-size: 12px; color: #777; text-align: center; }
+                    .highlight { color: #4CAF50; font-weight: bold; }
                 </style>
             </head>
             <body>
                 <div class='email-container'>
-                    <div class='email-header'>
-                        Verifikasi Kode OTP
-                    </div>
+                    <div class='email-header'>Verifikasi Kode OTP</div>
                     <div class='email-body'>
                         <p>Hai <span class='highlight'>{$user['username']}</span>,</p>
                         <p>Terima kasih telah menggunakan layanan kami. Berikut adalah kode verifikasi untuk melanjutkan:</p>
                         <div class='otp-code'>$otp</div>
                         <p>Masukkan kode ini di halaman verifikasi untuk melanjutkan. Jika Anda tidak meminta kode ini, abaikan email ini.</p>
                     </div>
-                    <div class='email-footer'>
-                        <p>&copy; 2024 N21.WERE. Semua hak cipta dilindungi.</p>
-                    </div>
+                    <div class='email-footer'>&copy; 2024 N21.WERE. Semua hak cipta dilindungi.</div>
                 </div>
             </body>
             </html>
@@ -117,7 +82,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $conn->close();
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -129,12 +93,8 @@ $conn->close();
 <body>
     <div class="container">
         <div class="login-logo">
-            <div>
-                <img width="50px" height="50px" src="../assets/media/icon.png" alt="">
-            </div>
-            <div>
-                <b>Nugra </b>DEV
-            </div>
+            <div><img width="50px" height="50px" src="../assets/media/icon.png" alt=""></div>
+            <div><b>Nugra </b>DEV</div>
         </div>
         <form action="index.php" method="POST">
             <h2>Login</h2>
@@ -154,7 +114,7 @@ $conn->close();
             <?php endif; ?>
             <div class="text-center">
                 <p>Belum punya akun? <a href="register.php">Daftar di sini</a></p>
-                <p><a href="../password/index.php">Lupa pasword</a></p>
+                <p><a href="../password/index.php">Lupa password</a></p>
             </div>
         </form>
     </div>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Login</title>
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="icon" href="assets/media/icon.png">
+    <!-- <link rel="icon" href="assets/media/icon.png"> -->
 </head>
 <body>
     <div class="container">
@@ -20,21 +20,30 @@
             <h2>--</h2>
             <div class="container-login">
         <h1>Selama datang</h1>
-        <a target="_blank" href="login/index.php">Login</a>
-        <a target="_blank" href="login/register.php">Register</a>
-        <a target="_blank" href="login/dashboard.php">Dashboard</a>
-        <a target="_blank" href="password/index.php">Forgot Password</a>
+        <div class="flex">
+            <a target="_blank" href="login/index.php">Login</a>
+            <a target="_blank" href="login/register.php">Register</a>
+            <a target="_blank" href="login/dashboard.php">Dashboard</a>
+            <a target="_blank" href="password/index.php">Forgot Password</a>
+        </div>
     </div>
         </form>
     </div>
     <style>
-                .container-login {
+        .flex{
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: last baseline;
+            width: 100%;
+        }
+        .container-login {
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
             text-align: center;
-            width: 300px;
+            width: 100%;
         }
 
         h1 {
